@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibe Mart - Amazon-Style Flagship Marketplace | Black & Gold Edition</title>
+  <meta name="description" content="Shop 100 Flagship Products with Voice & Photo Search AI across Mobiles, Electronics, Appliances, Furniture, Fashion, Shoes, Beauty & Accessories.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Toast Notification Stack -->
+  <div id="toast-container" style="position: fixed; top: 90px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 0.6rem; max-width: 360px;"></div>
+
+  <!-- SITE HEADER NAVIGATION WITH BIG LOGO -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-top">
+        <!-- BIG LOGO OF MART -->
+        <a href="#" class="brand-logo" onclick="window.VibeMart.switchView('home'); return false;">
+          <div class="brand-logo-icon">🛒</div>
+          <div>
+            Vibe<span style="color: var(--accent-yellow);">Mart</span>
+            <div style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 700; letter-spacing: 1px; line-height: 1;">100 PRODUCTS FLAGSHIP SUPERSTORE</div>
+          </div>
+        </a>
+
+        <!-- Location Badge -->
+        <button class="location-badge-btn" onclick="window.VibeMart.openLocationModal()">
+          <span style="color: var(--accent-yellow); font-size: 1.1rem;">📍</span>
+          <div class="location-text">
+            <span class="label">Deliver to</span>
+            <span class="val" id="header-location-val">San Francisco, CA</span>
+          </div>
+          <span style="font-size: 0.7rem; color: var(--text-secondary);">▼</span>
+        </button>
+
+        <!-- Global Search Bar with Photo & Voice Search AI -->
+        <div class="search-container" style="position: relative;">
+          <select class="search-category-select" id="header-category-select" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+            <option value="all">All 100 Products</option>
+            <option value="Electronics">Electronics & Tech</option>
+            <option value="Mobiles">Mobiles & Phones</option>
+            <option value="Appliances">Home Appliances</option>
+            <option value="Furniture">Furniture & Living</option>
+            <option value="Fashion">Fashion & Apparel</option>
+            <option value="Shoes">Shoes & Sneakers</option>
+            <option value="Beauty">Beauty & Care</option>
+            <option value="Accessories">Accessories & Watches</option>
+          </select>
+          
+          <input
+            type="text"
+            id="global-search-input"
+            class="search-input"
+            placeholder="Search 100 products (MacBook, PS5, iPhone, LG Fridge...)"
+            autocomplete="off"
+          />
+
+          <!-- Voice Search Button -->
+          <button class="search-icon-tool-btn" onclick="window.VibeMart.triggerVoiceSearch()" title="Search by Voice 🎙️">
+            🎙️
+          </button>
+
+          <!-- Photo / Visual Search AI Button -->
+          <button class="search-icon-tool-btn" onclick="window.VibeMart.openPhotoSearchModal()" title="Search by Photo / Visual AI 📷" style="color: #facc15;">
+            📷
+          </button>
+
+          <button class="search-btn" onclick="window.VibeMart.switchView('products');">🔍 SEARCH</button>
+
+          <!-- Live Autocomplete Menu -->
+          <div id="search-autocomplete-dropdown" class="search-autocomplete-menu hidden"></div>
+        </div>
+
+        <!-- Header Right Actions Corner -->
+        <div class="header-actions">
+          <!-- TOP RIGHT SECTIONS MEGA DROPDOWN MENU -->
+          <div class="sections-dropdown-wrapper">
+            <button class="action-btn" onclick="window.VibeMart.toggleSectionsMenu()" style="background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #000; border: 1.5px solid #ca8a04; padding: 6px 12px; border-radius: var(--radius-sm);">
+              <span style="font-size: 1.3rem;">📂</span>
+              <span style="font-weight: 800;">Sections ▾</span>
+            </button>
+
+            <div id="sections-mega-menu" class="sections-mega-menu hidden">
+              <div class="sections-mega-header">⚡ Jump Direct To Section</div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Electronics')">
+                <span style="font-size: 1.2rem;">💻</span> Electronics & Tech
+              </div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Mobiles')">
+                <span style="font-size: 1.2rem;">📱</span> Mobiles & Smartphones
+              </div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Appliances')">
+                <span style="font-size: 1.2rem;">🧊</span> Home Appliances
+              </div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Furniture')">
+                <span style="font-size: 1.2rem;">🛋️</span> Furniture & Living
+              </div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Fashion')">
+                <span style="font-size: 1.2rem;">👗</span> Fashion & Apparel
+              </div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Shoes')">
+                <span style="font-size: 1.2rem;">👟</span> Footwear & Sneakers
+              </div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Beauty')">
+                <span style="font-size: 1.2rem;">💄</span> Beauty & Personal Care
+              </div>
+              <div class="section-menu-item" onclick="window.VibeMart.jumpToSection('Accessories')">
+                <span style="font-size: 1.2rem;">⌚</span> Accessories & Watches
+              </div>
+              <div class="section-menu-item" style="border-top: 1px solid rgba(250, 204, 21, 0.4); padding-top: 0.6rem; color: #facc15;" onclick="const modal = document.getElementById('modal-giftcard'); if (modal) modal.classList.remove('hidden'); window.VibeMart.closeSectionsMenu();">
+                <span style="font-size: 1.2rem;">🎟️</span> Coupons & Gift Cards
+              </div>
+            </div>
+          </div>
+
+          <!-- MY ORDERS LINK -->
+          <button class="action-btn" onclick="window.VibeMart.switchView('profile', 'orders');">
+            <span style="font-size: 1.3rem;">📦</span>
+            <span>My Orders</span>
+          </button>
+
+          <!-- MY WALLET LINK -->
+          <button class="action-btn" onclick="window.VibeMart.switchView('profile', 'wallet');">
+            <span style="font-size: 1.3rem;">💳</span>
+            <span>My Wallet</span>
+            <span class="badge" id="header-wallet-balance" style="background: #10b981; color: white;">$250</span>
+          </button>
+
+          <!-- MY COUPONS LINK -->
+          <button class="action-btn" onclick="window.VibeMart.switchView('profile', 'coupons');">
+            <span style="font-size: 1.3rem;">🎟️</span>
+            <span>My Coupons</span>
+          </button>
+
+          <button class="action-btn nav-link-item" data-view="cart" onclick="window.VibeMart.switchView('cart')">
+            <span style="font-size: 1.3rem;">🛒</span>
+            <span>Cart</span>
+            <span class="badge" id="cart-badge">0</span>
+          </button>
+
+          <button class="action-btn nav-link-item" data-view="profile" onclick="window.VibeMart.switchView('profile')">
+            <span style="font-size: 1.3rem;">👤</span>
+            <span>Profile</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CATEGORY NAVIGATION BAR -->
+  <nav class="category-bar">
+    <div class="container">
+      <ul class="category-list">
+        <li><button class="category-item-btn active" onclick="window.VibeMart.switchView('products'); window.VibeMart.state.selectedCategory = 'all'; window.VibeMart.renderCatalog();">✨ All 100 Products</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Electronics')">💻 Electronics</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Mobiles')">📱 Mobiles</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Appliances')">🧊 Appliances</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Furniture')">🛋️ Furniture</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Fashion')">👗 Fashion</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Shoes')">👟 Shoes</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Beauty')">💄 Beauty</button></li>
+        <li><button class="category-item-btn" onclick="window.VibeMart.jumpToSection('Accessories')">⌚ Accessories</button></li>
+        <li style="margin-left: auto;">
+          <button class="category-item-btn" style="background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #000000; border-color: #ca8a04; font-weight: 800;" onclick="window.VibeMart.openPhotoSearchModal()">
+            📷 Photo Search AI
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- MAIN APP VIEWS CONTAINER -->
+  <main class="container" style="margin-top: 1.5rem;">
+
+    <!-- ==================== VIEW 1: HOME PAGE ==================== -->
+    <section id="view-home" class="view-section active">
+      <!-- Simple Homepage Search Banner (Easy for Anyone to Use) -->
+      <div class="hero-section">
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #020617 100%); border-radius: var(--radius-lg); padding: 2.5rem 2rem; border: 2px solid #facc15; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);">
+          <h1 style="font-size: 2.2rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.5rem;">
+            🔍 What are you looking for today?
+          </h1>
+          <p style="color: #cbd5e1; font-size: 1rem; margin-bottom: 1.5rem;">
+            Type any product name, brand, or item below to search 100 products instantly.
+          </p>
+
+          <!-- Big Simple Main Search Bar -->
+          <div style="max-width: 780px; margin: 0 auto; display: flex; gap: 0.5rem; background: #1e293b; border: 2px solid #facc15; border-radius: var(--radius-full); padding: 6px; box-shadow: 0 4px 20px rgba(250, 204, 21, 0.3);">
+            <input
+              type="text"
+              id="home-simple-search-input"
+              class="search-input"
+              placeholder="Search for iPhone, Laptop, Refrigerator, Shoes, Sofa, Watch..."
+              style="padding: 0.8rem 1.2rem; font-size: 1.05rem; color: #ffffff;"
+              oninput="window.VibeMart.handleHomeSearch(this.value);"
+            />
+            <button class="btn-primary" style="padding: 0.8rem 1.8rem; font-weight: 800; font-size: 1rem; flex-shrink: 0;" onclick="window.VibeMart.executeHomeSearch();">
+              🔍 Search Now
+            </button>
+          </div>
+
+          <!-- Quick Everyday Category Shortcuts -->
+          <div style="display: flex; gap: 0.6rem; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 1.2rem;">
+            <span style="color: #facc15; font-size: 0.85rem; font-weight: 800;">Popular Searches:</span>
+            <button class="btn-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700;" onclick="window.VibeMart.quickHomeSearch('iPhone')">📱 iPhones</button>
+            <button class="btn-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700;" onclick="window.VibeMart.quickHomeSearch('MacBook')">💻 MacBooks</button>
+            <button class="btn-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700;" onclick="window.VibeMart.quickHomeSearch('Refrigerator')">🧊 Fridges</button>
+            <button class="btn-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700;" onclick="window.VibeMart.quickHomeSearch('Sofa')">🛋️ Sofas</button>
+            <button class="btn-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700;" onclick="window.VibeMart.quickHomeSearch('Nike')">👟 Sneakers</button>
+            <button class="btn-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700;" onclick="window.VibeMart.quickHomeSearch('Watch')">⌚ Watches</button>
+          </div>
+        </div>
+
+
+        <!-- Value Proposition Bar -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding: 1.2rem; background: #0f172a; border-radius: var(--radius-md); border: 2px solid rgba(250, 204, 21, 0.4);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.6rem;">🚚</span>
+            <div>
+              <h5 style="font-size: 0.95rem; font-weight: 800; color: #f8fafc;">Fast Doorstep Delivery</h5>
+              <p style="font-size: 0.78rem; color: var(--text-secondary);">Location access delivery</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.6rem;">📷</span>
+            <div>
+              <h5 style="font-size: 0.95rem; font-weight: 800; color: #f8fafc;">Photo Search AI Engine</h5>
+              <p style="font-size: 0.78rem; color: var(--text-secondary);">Snap image & match items</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.6rem;">🎧</span>
+            <div>
+              <h5 style="font-size: 0.95rem; font-weight: 800; color: #f8fafc;">24/7 Customer Helping Team</h5>
+              <p style="font-size: 0.78rem; color: var(--text-secondary);">Hotline & Live Chat</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.6rem;">💳</span>
+            <div>
+              <h5 style="font-size: 0.95rem; font-weight: 800; color: #f8fafc;">Flexible Payment</h5>
+              <p style="font-size: 0.78rem; color: var(--text-secondary);">UPI, Wallet, Cards, COD</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMO COUPONS & GIFT CARDS SECTION -->
+      <section style="margin: 2rem 0; padding: 1.8rem; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border-radius: var(--radius-lg); border: 2px solid #facc15;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span style="font-weight: 800; color: #facc15; font-size: 0.82rem; letter-spacing: 1px;">INSTANT OFFERS & REWARDS</span>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: #f8fafc;">🎟️ Active Promo Coupons & Digital Gift Cards</h2>
+          </div>
+          <button class="btn-primary" onclick="const modal = document.getElementById('modal-giftcard'); if (modal) modal.classList.remove('hidden');">
+            🎁 Manage Gift Balance
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+          <div class="coupon-card" style="background: #1e293b; border-color: #facc15;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span class="coupon-tag">FLAGSHIP DEAL</span>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #f8fafc; margin-top: 4px;">Flat $100 OFF Mobiles</h4>
+                <p style="font-size: 0.8rem; color: #cbd5e1;">Min spend $700 on iPhones & Galaxy</p>
+              </div>
+              <div class="coupon-code-badge" onclick="window.VibeMart.applyCoupon('MOBILE100')">MOBILE100</div>
+            </div>
+          </div>
+
+          <div class="coupon-card" style="background: #1e293b; border-color: #facc15;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span class="coupon-tag">SUPER STORE</span>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #f8fafc; margin-top: 4px;">25% OFF Site Wide</h4>
+                <p style="font-size: 0.8rem; color: #cbd5e1;">Min spend $500 across all categories</p>
+              </div>
+              <div class="coupon-code-badge" onclick="window.VibeMart.applyCoupon('AMZSUPER')">AMZSUPER</div>
+            </div>
+          </div>
+
+          <div class="coupon-card" style="background: #1e293b; border-color: #facc15;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span class="coupon-tag">WALLET OFFER</span>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #f8fafc; margin-top: 4px;">$50 OFF Wallet Pay</h4>
+                <p style="font-size: 0.8rem; color: #cbd5e1;">Min spend $150 with VibeMart Wallet</p>
+              </div>
+              <div class="coupon-code-badge" onclick="window.VibeMart.applyCoupon('WALLET50')">WALLET50</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOMEPAGE DISTINCT CATEGORY SECTIONS WITH DEDICATED SECTION MODALS -->
+
+      <!-- SECTION 1: ELECTRONICS & TECH -->
+      <div id="home-section-electronics" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">💻 Electronics & Tech Section (15 Products)</h2>
+            <p class="section-subtitle">MacBooks, Noise Canceling Headphones, Gaming Consoles, Displays & Drones</p>
+          </div>
+          <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Electronics'; window.VibeMart.switchView('products')">Explore 15 Electronics →</button>
+        </div>
+        <div id="home-grid-electronics" class="product-grid"></div>
+      </div>
+
+      <!-- SECTION 2: MOBILES & SMARTPHONES -->
+      <div id="home-section-mobiles" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">📱 Mobiles & Smartphones Section (15 Products)</h2>
+            <p class="section-subtitle">Apple iPhone, Samsung Galaxy, Google Pixel, OnePlus, Xiaomi & Nothing</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn-secondary" onclick="window.VibeMart.openMobileCompareModal()" style="background: #1e293b; border-color: #facc15; color: #f8fafc;">⚖️ Compare & Trade-In</button>
+            <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Mobiles'; window.VibeMart.switchView('products')">Explore 15 Mobiles →</button>
+          </div>
+        </div>
+        <div id="home-grid-mobiles" class="product-grid"></div>
+      </div>
+
+      <!-- SECTION 3: HOME & KITCHEN APPLIANCES -->
+      <div id="home-section-appliances" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">🧊 Home & Kitchen Appliances Section (15 Products)</h2>
+            <p class="section-subtitle">InstaView Refrigerators, Washers, Air Fryers, Dyson Vacuums & Smart TVs</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn-secondary" onclick="window.VibeMart.openApplianceServiceModal()" style="background: #1e293b; border-color: #facc15; color: #f8fafc;">🛠️ Installation & Warranty</button>
+            <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Appliances'; window.VibeMart.switchView('products')">Explore 15 Appliances →</button>
+          </div>
+        </div>
+        <div id="home-grid-appliances" class="product-grid"></div>
+      </div>
+
+      <!-- SECTION 4: FURNITURE & LIVING -->
+      <div id="home-section-furniture" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">🛋️ Furniture & Home Living Section (15 Products)</h2>
+            <p class="section-subtitle">Herman Miller Aeron, Standing Desks, Recliner Sofas & Memory Foam Mattresses</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn-secondary" onclick="window.VibeMart.openFurnitureCustomizerModal()" style="background: #1e293b; border-color: #facc15; color: #f8fafc;">🎨 3D Color Customizer</button>
+            <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Furniture'; window.VibeMart.switchView('products')">Explore 15 Furniture →</button>
+          </div>
+        </div>
+        <div id="home-grid-furniture" class="product-grid"></div>
+      </div>
+
+      <!-- SECTION 5: FASHION & APPAREL -->
+      <div id="home-section-fashion" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">👗 Fashion & Apparel Section (10 Products)</h2>
+            <p class="section-subtitle">Levi's Denim, Ray-Ban Sunglasses, Nike Tech Fleece & Hugo Boss Suits</p>
+          </div>
+          <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Fashion'; window.VibeMart.switchView('products')">Explore 10 Fashion →</button>
+        </div>
+        <div id="home-grid-fashion" class="product-grid"></div>
+      </div>
+
+      <!-- SECTION 6: FOOTWEAR & SNEAKERS -->
+      <div id="home-section-shoes" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">👟 Footwear & Sneakers Section (10 Products)</h2>
+            <p class="section-subtitle">Nike Air Force 1, Adidas Ultraboost, Air Jordan 1 & Timberland Boots</p>
+          </div>
+          <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Shoes'; window.VibeMart.switchView('products')">Explore 10 Footwear →</button>
+        </div>
+        <div id="home-grid-shoes" class="product-grid"></div>
+      </div>
+
+      <!-- SECTION 7: BEAUTY & CARE -->
+      <div id="home-section-beauty" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">💄 Beauty & Personal Care Section (10 Products)</h2>
+            <p class="section-subtitle">Dyson Airwrap, Estée Lauder, Dior Sauvage & CeraVe Cleansers</p>
+          </div>
+          <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Beauty'; window.VibeMart.switchView('products')">Explore 10 Beauty →</button>
+        </div>
+        <div id="home-grid-beauty" class="product-grid"></div>
+      </div>
+
+      <!-- SECTION 8: ACCESSORIES & WATCHES -->
+      <div id="home-section-accessories" style="margin-top: 2.5rem; scroll-margin-top: 100px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">⌚ Accessories & Smart Watches Section (10 Products)</h2>
+            <p class="section-subtitle">Apple Watch Ultra 2 Titanium, Kindle Paperwhite & Garmin Fenix 7</p>
+          </div>
+          <button class="btn-secondary" onclick="window.VibeMart.state.selectedCategory = 'Accessories'; window.VibeMart.switchView('products')">Explore 10 Accessories →</button>
+        </div>
+        <div id="home-grid-accessories" class="product-grid"></div>
+      </div>
+
+      <!-- Homepage Customer Helping Team Section -->
+      <section class="support-banner-section">
+        <div class="support-content-grid">
+          <div>
+            <span style="font-size: 0.82rem; color: #facc15; font-weight: 800; letter-spacing: 1px;">CUSTOMER HELPING TEAM</span>
+            <h2 style="font-size: 1.9rem; font-weight: 800; margin: 0.4rem 0 1rem 0; color: #f8fafc;">We Are Here To Help You 24/7</h2>
+            <p style="color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.6;">
+              Questions about product specifications, shipping times, or coupon redemption? Contact our dedicated support team anytime.
+            </p>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <button class="btn-primary" onclick="const modal = document.getElementById('modal-support'); if (modal) modal.classList.remove('hidden');">
+                💬 Live Support Chat
+              </button>
+              <a href="tel:18008882739" class="btn-secondary">
+                📞 Call 1800-VIBE-MART
+              </a>
+            </div>
+          </div>
+
+          <div class="support-features">
+            <div class="support-feature-box">
+              <span style="font-size: 1.6rem;">📞</span>
+              <div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; color: #f8fafc;">24/7 Helpline</h4>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">Toll Free: 1800-888-VIBE</p>
+              </div>
+            </div>
+            <div class="support-feature-box">
+              <span style="font-size: 1.6rem;">✉️</span>
+              <div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; color: #f8fafc;">Email Support</h4>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">support@vibemart.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ==================== VIEW 2: PRODUCTS CATALOG PAGE ==================== -->
+    <section id="view-products" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🛍️ Full 100 Products Catalog</h2>
+          <p class="section-subtitle" id="catalog-item-count">Browse items across Mobiles, Electronics, Appliances, Furniture, Fashion, Shoes, Beauty & Accessories</p>
+        </div>
+
+        <select id="catalog-sort-select" class="search-category-select" style="border-radius: var(--radius-sm); padding: 0.6rem 1rem;" onchange="window.VibeMart.state.sortBy = this.value; window.VibeMart.switchView('products');">
+          <option value="featured">Sort by: Featured</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="rating">Highest Customer Rating</option>
+        </select>
+      </div>
+
+      <div class="catalog-layout">
+        <!-- Sidebar Filters -->
+        <aside class="filter-sidebar">
+          <div style="font-weight: 800; font-size: 1.1rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">
+            <span>⚙️</span> Filter 100 Products
+          </div>
+
+          <div class="filter-group">
+            <h4 class="filter-title">Category</h4>
+            <div class="filter-options">
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="all" checked onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>All 100 Products</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Electronics" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>💻 Electronics & Tech (15)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Mobiles" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>📱 Mobiles & Phones (15)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Appliances" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>🧊 Home Appliances (15)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Furniture" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>🛋️ Furniture & Living (15)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Fashion" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>👗 Fashion & Apparel (10)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Shoes" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>👟 Shoes & Footwear (10)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Beauty" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>💄 Beauty & Care (10)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="catalogCat" value="Accessories" onchange="window.VibeMart.state.selectedCategory = this.value; window.VibeMart.switchView('products');">
+                <span>⌚ Accessories & Watches (10)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h4 class="filter-title">Max Price: <span id="price-slider-val">$4000</span></h4>
+            <input type="range" id="price-range-slider" min="10" max="4000" step="50" value="4000" style="width: 100%; accent-color: var(--accent-yellow);" />
+          </div>
+        </aside>
+
+        <!-- Product Cards Container -->
+        <div style="flex: 1;">
+          <div class="product-grid" id="products-catalog-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: SHOPPING CART PAGE ==================== -->
+    <section id="view-cart" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🛒 Your Shopping Cart</h2>
+          <p class="section-subtitle">Review items, apply promo coupons, gift cards, and calculate total cost</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        <div id="cart-page-body" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+
+        <div style="background: #1e293b; border: 2px solid rgba(250, 204, 21, 0.4); padding: 1.5rem; border-radius: var(--radius-lg); height: fit-content;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem; color: #f8fafc;">Cost Summary</h3>
+          <div id="cart-cost-summary"></div>
+
+          <button class="btn-primary" style="width: 100%; justify-content: center; padding: 1.1rem; margin-top: 1.2rem;" onclick="window.VibeMart.switchView('checkout')">
+            Proceed to Payment Checkout →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: CHECKOUT PAGE ==================== -->
+    <section id="view-checkout" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">💳 Secure Payment Checkout</h2>
+          <p class="section-subtitle">Verify address, total cost, gift balance, and select payment method</p>
+        </div>
+      </div>
+
+      <form id="checkout-form" onsubmit="event.preventDefault(); window.VibeMart.placeOrder({ method: document.querySelector('input[name=payMethod]:checked').value });">
+        <div style="background: #1e293b; padding: 1.2rem; border-radius: var(--radius-md); border: 2px solid rgba(250, 204, 21, 0.4); margin-bottom: 1.5rem;">
+          <h4 style="font-weight: 800; margin-bottom: 0.6rem; color: #f8fafc;">📍 Shipping & Delivery Address</h4>
+          <input type="text" class="form-input" id="checkout-address-input" value="Market St, San Francisco, CA - 94016" required />
+        </div>
+
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem; color: #f8fafc;">Choose Payment Method</h3>
+        <div class="payment-methods-grid">
+          <label class="payment-method-card selected">
+            <input type="radio" name="payMethod" value="wallet" checked />
+            <span style="font-size: 1.6rem;">💳</span>
+            <div>
+              <div style="font-weight: 800; color: #f8fafc;">VibeMart Digital Wallet</div>
+              <div style="font-size: 0.78rem; color: #10b981; font-weight: 700;">1-Click Pay • Earn 5% Cashback</div>
+            </div>
+          </label>
+
+          <label class="payment-method-card">
+            <input type="radio" name="payMethod" value="upi" />
+            <span style="font-size: 1.6rem;">📱</span>
+            <div>
+              <div style="font-weight: 800; color: #f8fafc;">UPI (GPay / PhonePe)</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary);">Instant mobile payment</div>
+            </div>
+          </label>
+
+          <label class="payment-method-card">
+            <input type="radio" name="payMethod" value="giftcard" />
+            <span style="font-size: 1.6rem;">🎁</span>
+            <div>
+              <div style="font-weight: 800; color: #f8fafc;">Gift Voucher Balance</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary);">Redeem store credit balance</div>
+            </div>
+          </label>
+
+          <label class="payment-method-card">
+            <input type="radio" name="payMethod" value="card" />
+            <span style="font-size: 1.6rem;">💳</span>
+            <div>
+              <div style="font-weight: 800; color: #f8fafc;">Credit / Debit Cards</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary);">Visa, MasterCard</div>
+            </div>
+          </label>
+
+          <label class="payment-method-card">
+            <input type="radio" name="payMethod" value="cod" />
+            <span style="font-size: 1.6rem;">💵</span>
+            <div>
+              <div style="font-weight: 800; color: #f8fafc;">Cash on Delivery (COD)</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary);">Pay cash at doorstep</div>
+            </div>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 1.2rem; font-size: 1.2rem; font-weight: 800;">
+          🚀 PLACE ORDER NOW
+        </button>
+      </form>
+    </section>
+
+    <!-- ==================== VIEW 5: USER PROFILE, MY ORDERS, MY WALLET, MY COUPONS DASHBOARD ==================== -->
+    <section id="view-profile" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">👤 User Account Dashboard</h2>
+          <p class="section-subtitle">Track orders, manage digital wallet funds, view saved promo coupons & wishlist</p>
+        </div>
+      </div>
+
+      <div id="profile-user-info" style="margin-bottom: 1.5rem;"></div>
+
+      <!-- DASHBOARD TABS BAR -->
+      <div class="profile-tabs-bar" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; background: #1e293b; padding: 0.5rem; border-radius: var(--radius-md); border: 2px solid rgba(250, 204, 21, 0.4);">
+        <button class="profile-tab-btn active" onclick="window.VibeMart.switchView('profile', 'orders')">📦 My Orders</button>
+        <button class="profile-tab-btn" onclick="window.VibeMart.switchView('profile', 'wallet')">💳 My Wallet</button>
+        <button class="profile-tab-btn" onclick="window.VibeMart.switchView('profile', 'coupons')">🎟️ My Coupons</button>
+        <button class="profile-tab-btn" onclick="window.VibeMart.switchView('profile', 'wishlist')">❤️ My Wishlist</button>
+        <button class="profile-tab-btn" onclick="window.VibeMart.switchView('profile', 'address')">📍 Saved Address</button>
+      </div>
+
+      <!-- DASHBOARD TAB DYNAMIC CONTENT CONTAINER -->
+      <div id="profile-dashboard-content"></div>
+    </section>
+  </main>
+
+  <!-- FLOATING SUPPORT BUTTON -->
+  <button class="floating-support-btn" onclick="const modal = document.getElementById('modal-support'); if (modal) modal.classList.toggle('hidden');" title="Customer Helping Team">
+    🎧
+  </button>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-logo" style="margin-bottom: 1rem; color: #ffffff;">
+            <div class="brand-logo-icon">🛒</div>
+            Vibe<span style="color: #facc15;">Mart</span>
+          </div>
+          <p>Modern E-Commerce marketplace for Mobiles, Electronics, Appliances, Furniture, Fashion, Shoes, Beauty, and Accessories with location access delivery.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Product Categories</h4>
+          <ul class="footer-links">
+            <li><a href="#" onclick="window.VibeMart.jumpToSection('Electronics'); return false;">Electronics & Tech</a></li>
+            <li><a href="#" onclick="window.VibeMart.jumpToSection('Mobiles'); return false;">Mobiles & Phones</a></li>
+            <li><a href="#" onclick="window.VibeMart.jumpToSection('Appliances'); return false;">Home Appliances</a></li>
+            <li><a href="#" onclick="window.VibeMart.jumpToSection('Furniture'); return false;">Furniture & Living</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Customer Support Team</h4>
+          <ul class="footer-links">
+            <li><a href="#">Toll Free: 1800-888-VIBE</a></li>
+            <li><a href="#">Email: support@vibemart.com</a></li>
+            <li><a href="#" onclick="const modal = document.getElementById('modal-support'); if (modal) modal.classList.remove('hidden'); return false;">Live Chat (24/7)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Supported Payment Methods</h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
+            <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);">📱 UPI (GPay/PhonePe)</span>
+            <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);">🎁 Gift Cards</span>
+            <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);">🏦 Net Banking</span>
+            <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);">💳 Cards</span>
+            <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);">💵 Cash on Delivery</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; color: #9ca3af;">
+        © 2026 Vibe Mart Marketplace Inc. All rights reserved. Built with high precision & location access delivery.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- PHOTO / VISUAL SEARCH AI MODAL -->
+  <div id="modal-photo-search" class="modal-overlay hidden" onclick="window.VibeMart.closePhotoSearchModal()">
+    <div class="modal-content" style="max-width: 650px;" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="window.VibeMart.closePhotoSearchModal()">✕</button>
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem; color: #f8fafc;">📷 Photo Search & Visual AI Match</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+        Upload a photo or click a sample image to automatically recognize and filter matching products.
+      </p>
+
+      <!-- UPLOAD DROP ZONE -->
+      <div style="border: 2px dashed #facc15; background: #1e293b; border-radius: var(--radius-md); padding: 1.8rem; text-align: center; position: relative; margin-bottom: 1.2rem; cursor: pointer;">
+        <input type="file" accept="image/*" onchange="window.VibeMart.handlePhotoUpload(this)" style="position: absolute; inset: 0; opacity: 0; cursor: pointer;" />
+        <div style="font-size: 2.8rem; margin-bottom: 0.4rem;">📷</div>
+        <h4 style="font-weight: 800; color: #f8fafc;">Drag & Drop Product Photo Here</h4>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">or click to browse image from your device</p>
+      </div>
+
+      <!-- DEMO SAMPLE PHOTO BUTTONS -->
+      <h4 style="font-weight: 800; color: #f8fafc; font-size: 0.9rem; margin-bottom: 0.6rem;">⚡ Try Instant Sample Photo Demos:</h4>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem;">
+        <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 800;" onclick="window.VibeMart.processPhotoSearch('https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=300', 'Phone Mobile')">📱 Mobile Phone Photo</button>
+        <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 800;" onclick="window.VibeMart.processPhotoSearch('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300', 'Laptop Electronics Tech')">💻 Laptop Photo</button>
+        <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 800;" onclick="window.VibeMart.processPhotoSearch('https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=300', 'Sneaker Shoe')">👟 Shoe Photo</button>
+        <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 800;" onclick="window.VibeMart.processPhotoSearch('https://images.unsplash.com/photo-1580481072645-022f9a6d5017?w=300', 'Chair Sofa Furniture')">🛋️ Chair Furniture Photo</button>
+        <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 800;" onclick="window.VibeMart.processPhotoSearch('https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=300', 'Watch Accessory')">⌚ Watch Photo</button>
+      </div>
+
+      <!-- SCANNING ANIMATION CONTAINER -->
+      <div id="photo-search-preview-container" class="hidden" style="position: relative; overflow: hidden; border-radius: var(--radius-md); border: 2px solid #facc15; height: 200px; background: #111827; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+        <img id="photo-search-preview-img" src="" alt="Scanning Preview" style="max-height: 100%; max-width: 100%; object-fit: contain;" />
+        <div id="photo-scan-laser" class="photo-scan-laser hidden"></div>
+        <div style="position: absolute; bottom: 8px; background: rgba(0,0,0,0.85); color: #facc15; padding: 4px 12px; border-radius: 999px; font-weight: 800; font-size: 0.8rem;" id="photo-scan-status">
+          🔍 Scanning image...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. PRODUCT DETAIL MODAL -->
+  <div id="modal-product-detail" class="modal-overlay hidden" onclick="window.VibeMart.closeProductDetails()">
+    <div class="modal-content" style="max-width: 820px; padding: 0; overflow: hidden;" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="window.VibeMart.closeProductDetails()">✕</button>
+      <div style="display: grid; grid-template-columns: 1fr 1fr;">
+        <div style="background: #0f172a; padding: 2rem; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(250,204,21,0.3);">
+          <img id="detail-img" src="" alt="Product" style="max-height: 300px; max-width: 100%; object-fit: contain;" />
+        </div>
+        <div style="padding: 2rem; display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; background: #0f172a;">
+          <span class="product-category-tag" id="detail-cat">Category</span>
+          <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0.4rem 0; color: #f8fafc;" id="detail-title">Product Name</h2>
+          <div style="font-size: 1.6rem; font-weight: 800; margin: 0.8rem 0; color: #facc15;" id="detail-price">$0</div>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.2rem;" id="detail-desc">Description</p>
+          <div id="detail-specs" style="margin-bottom: 1.2rem;"></div>
+          <button class="btn-primary" style="margin-top: auto; justify-content: center;" onclick="window.VibeMart.addToCart(window.VibeMart.state.quickViewProduct.id); window.VibeMart.closeProductDetails();">
+            🛒 Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MOBILE COMPARE & TRADE-IN MODAL -->
+  <div id="modal-mobile-compare" class="modal-overlay hidden" onclick="document.getElementById('modal-mobile-compare').classList.add('hidden');">
+    <div class="modal-content" style="max-width: 680px;" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="document.getElementById('modal-mobile-compare').classList.add('hidden');">✕</button>
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem; color: #f8fafc;">📱 Mobile Specs Compare & Trade-In Calculator</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+        Compare flagship specs side-by-side or calculate old smartphone exchange trade-in discount.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: #1e293b; padding: 1.2rem; border-radius: var(--radius-md); border: 2px solid rgba(250, 204, 21, 0.4); margin-bottom: 1.2rem;">
+        <div>
+          <h4 style="font-weight: 800; color: #f8fafc; font-size: 0.95rem;">Select Phone 1</h4>
+          <select class="form-input" style="margin-top: 6px;" onchange="window.VibeMart.showToast('Selected Phone 1 for specs comparison', 'info')">
+            <option>Apple iPhone 15 Pro Max</option>
+            <option>Samsung Galaxy S24 Ultra</option>
+            <option>Google Pixel 8 Pro</option>
+            <option>OnePlus 12 5G</option>
+          </select>
+        </div>
+
+        <div>
+          <h4 style="font-weight: 800; color: #f8fafc; font-size: 0.95rem;">Select Phone 2</h4>
+          <select class="form-input" style="margin-top: 6px;" onchange="window.VibeMart.showToast('Selected Phone 2 for specs comparison', 'info')">
+            <option>Samsung Galaxy S24 Ultra</option>
+            <option>Apple iPhone 15 Pro Max</option>
+            <option>Xiaomi 14 Ultra</option>
+            <option>Nothing Phone (2)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="background: #1e293b; border: 1px solid rgba(250, 204, 21, 0.4); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.2rem;">
+        <h4 style="font-weight: 800; color: #f8fafc; margin-bottom: 0.5rem;">♻️ Trade-In Old Phone Value</h4>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" placeholder="e.g. iPhone 12 128GB" class="form-input" id="tradein-phone-input" />
+          <button class="btn-primary" onclick="window.VibeMart.showToast('Estimated Trade-in Credit: $280 OFF instant discount!', 'success')">Calculate Value</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. APPLIANCE SERVICE & WARRANTY MODAL -->
+  <div id="modal-appliance-service" class="modal-overlay hidden" onclick="document.getElementById('modal-appliance-service').classList.add('hidden');">
+    <div class="modal-content" style="max-width: 620px;" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="document.getElementById('modal-appliance-service').classList.add('hidden');">✕</button>
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem; color: #f8fafc;">🧊 Free Appliance Home Installation & Extended Warranty</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+        Schedule technician doorstep installation for Refrigerators, Washing Machines & Smart TVs.
+      </p>
+
+      <form onsubmit="event.preventDefault(); window.VibeMart.showToast('Installation slot booked! Technician assigned.', 'success'); document.getElementById('modal-appliance-service').classList.add('hidden');">
+        <div class="form-group">
+          <label class="form-label">Select Appliance Purchased</label>
+          <select class="form-input">
+            <option>LG InstaView Refrigerator (635L)</option>
+            <option>Samsung 9kg AI Washer</option>
+            <option>Sony BRAVIA XR 65" OLED TV</option>
+            <option>LG Dual Inverter AC</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preferred Technician Date & Slot</label>
+          <input type="date" class="form-input" value="2026-08-08" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Add 3-Year Extended Protection Warranty ($49)</label>
+          <select class="form-input">
+            <option>Yes (+ $49 3-Year Zero-Cost Repairs)</option>
+            <option>No, Standard 1-Year Brand Warranty Only</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.9rem;">
+          ✓ Confirm Service Appointment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. FURNITURE 3D CUSTOMIZER MODAL -->
+  <div id="modal-furniture-customizer" class="modal-overlay hidden" onclick="document.getElementById('modal-furniture-customizer').classList.add('hidden');">
+    <div class="modal-content" style="max-width: 640px;" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="document.getElementById('modal-furniture-customizer').classList.add('hidden');">✕</button>
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem; color: #f8fafc;">🎨 Furniture Fabric & Wood Finish Customizer</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+        Customize colors, wood finishes & dimensions for Herman Miller, Standing Desks & Sofas.
+      </p>
+
+      <div style="background: #1e293b; padding: 1.2rem; border-radius: var(--radius-md); border: 2px solid rgba(250, 204, 21, 0.4); margin-bottom: 1.2rem;">
+        <h4 style="font-weight: 800; color: #f8fafc; margin-bottom: 0.6rem;">Choose Leather / Fabric Color</h4>
+        <div style="display: flex; gap: 0.8rem; margin-bottom: 1rem;">
+          <button style="width: 36px; height: 36px; border-radius: 50%; background: #ca8a04; border: 2px solid #facc15; cursor: pointer;" onclick="window.VibeMart.showToast('Selected Charme Tan Leather', 'info')"></button>
+          <button style="width: 36px; height: 36px; border-radius: 50%; background: #111827; border: 2px solid #facc15; cursor: pointer;" onclick="window.VibeMart.showToast('Selected Midnight Black Fabric', 'info')"></button>
+          <button style="width: 36px; height: 36px; border-radius: 50%; background: #6b7280; border: 2px solid #facc15; cursor: pointer;" onclick="window.VibeMart.showToast('Selected Nordvalla Grey Weave', 'info')"></button>
+          <button style="width: 36px; height: 36px; border-radius: 50%; background: #047857; border: 2px solid #facc15; cursor: pointer;" onclick="window.VibeMart.showToast('Selected Emerald Green Velvet', 'info')"></button>
+        </div>
+
+        <h4 style="font-weight: 800; color: #f8fafc; margin-bottom: 0.6rem;">Choose Tabletop / Leg Finish</h4>
+        <select class="form-input" onchange="window.VibeMart.showToast('Updated wood finish', 'info')">
+          <option>Solid Natural Walnut Wood</option>
+          <option>Solid Bamboo Eco Top</option>
+          <option>Matte Black Alloy Steel Frame</option>
+          <option>Scandinavian Light Oak</option>
+        </select>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; justify-content: center; padding: 0.9rem;" onclick="window.VibeMart.showToast('Customized furniture spec saved to cart!', 'success'); document.getElementById('modal-furniture-customizer').classList.add('hidden');">
+        ✓ Apply Custom Spec & Add to Cart
+      </button>
+    </div>
+  </div>
+
+  <!-- 5. COUPONS & GIFT CARDS MODAL -->
+  <div id="modal-giftcard" class="modal-overlay hidden" onclick="document.getElementById('modal-giftcard').classList.add('hidden');">
+    <div class="modal-content" style="max-width: 600px;" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="document.getElementById('modal-giftcard').classList.add('hidden');">✕</button>
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.4rem; color: #f8fafc;">🎁 VibeMart Digital Gift Cards & Store Credit</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+        Purchase digital gift cards or redeem pre-issued gift voucher codes.
+      </p>
+
+      <div style="background: #1e293b; padding: 1rem; border-radius: var(--radius-md); border: 2px solid rgba(250, 204, 21, 0.4); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">YOUR CURRENT GIFT BALANCE</span>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #facc15;" id="modal-gift-balance-display">$50</div>
+        </div>
+        <span style="font-size: 2.2rem;">💳</span>
+      </div>
+
+      <h4 style="font-weight: 800; color: #f8fafc; margin-bottom: 0.6rem;">🎟️ Redeem Gift Card Code</h4>
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+        <input type="text" id="gift-code-input" class="form-input" placeholder="Try code: GIFT50, GIFT100, VIBE500" style="text-transform: uppercase;" />
+        <button class="btn-primary" onclick="window.VibeMart.redeemGiftCard(document.getElementById('gift-code-input').value)">Redeem Code</button>
+      </div>
+
+      <h4 style="font-weight: 800; color: #f8fafc; margin-bottom: 0.6rem;">🛍️ Buy Digital Gift Cards</h4>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1rem;">
+        <button class="btn-secondary" style="justify-content: center; font-weight: 800;" onclick="window.VibeMart.buyGiftCard(25)">+ $25 Card</button>
+        <button class="btn-secondary" style="justify-content: center; font-weight: 800;" onclick="window.VibeMart.buyGiftCard(50)">+ $50 Card</button>
+        <button class="btn-secondary" style="justify-content: center; font-weight: 800;" onclick="window.VibeMart.buyGiftCard(100)">+ $100 Card</button>
+        <button class="btn-secondary" style="justify-content: center; font-weight: 800;" onclick="window.VibeMart.buyGiftCard(250)">+ $250 Card</button>
+        <button class="btn-secondary" style="justify-content: center; font-weight: 800; grid-column: span 2;" onclick="window.VibeMart.buyGiftCard(500)">+ $500 VIP Card</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. LOCATION ACCESS MODAL -->
+  <div id="modal-location" class="modal-overlay hidden" onclick="window.VibeMart.closeLocationModal()">
+    <div class="modal-content" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="window.VibeMart.closeLocationModal()">✕</button>
+      <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; color: #f8fafc;">📍 Location Access & Delivery</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+        Detect GPS location or enter your City/Pincode to check shipping speed
+      </p>
+
+      <button class="btn-primary" onclick="window.VibeMart.detectGPSLocation()" style="width: 100%; justify-content: center; padding: 0.85rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white;">
+        📡 Use My Current Location (GPS Access)
+      </button>
+
+      <form onsubmit="event.preventDefault(); window.VibeMart.saveManualLocation(document.getElementById('loc-city-in').value, document.getElementById('loc-pin-in').value);">
+        <div class="form-group">
+          <label class="form-label">City / Region</label>
+          <input type="text" id="loc-city-in" class="form-input" value="San Francisco, CA" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">ZIP / Pincode</label>
+          <input type="text" id="loc-pin-in" class="form-input" value="94016" required />
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;">
+          ✓ Save Location & Update Shipping
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 7. AUTH MODAL (LOGIN & SIGN UP) -->
+  <div id="modal-auth" class="modal-overlay hidden" onclick="window.VibeMart.closeAuthModal()">
+    <div class="modal-content" onclick="event.stopPropagation();">
+      <button class="modal-close-btn" onclick="window.VibeMart.closeAuthModal()">✕</button>
+      <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem; color: #f8fafc;">🔑 Sign In / Create Account</h3>
+
+      <form onsubmit="event.preventDefault(); window.VibeMart.login(document.getElementById('auth-email-in').value, document.getElementById('auth-pass-in').value);">
+        <div class="form-group">
+          <label class="form-label">Email or Mobile Number</label>
+          <input type="email" id="auth-email-in" class="form-input" placeholder="name@example.com" value="user@vibemart.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="auth-pass-in" class="form-input" placeholder="••••••••" value="password123" required />
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;">
+          Sign In to Vibe Mart
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 8. ORDER CONFIRMATION MODAL -->
+  <div id="modal-order-success" class="modal-overlay hidden" onclick="document.getElementById('modal-order-success').classList.add('hidden');">
+    <div class="modal-content" style="text-align: center; max-width: 520px;" onclick="event.stopPropagation();">
+      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.4rem; color: #f8fafc;">Order Placed Successfully!</h2>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+        Your order reference ID is <strong id="success-order-id" style="color: #facc15;">AMZ-000000</strong>
+      </p>
+
+      <div style="background: #1e293b; padding: 1rem; border-radius: var(--radius-md); border: 2px solid rgba(250, 204, 21, 0.4); text-align: left; margin-bottom: 1.2rem; font-size: 0.88rem; color: #f8fafc;">
+        <div>📅 Estimated Delivery Date: <strong id="success-delivery-date">Tomorrow</strong></div>
+        <div style="border-top: 1px solid rgba(250, 204, 21, 0.3); margin-top: 8px; padding-top: 8px; font-weight: 800;">
+          Total Paid: <span id="success-order-total" style="color: #facc15;">$0</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="document.getElementById('modal-order-success').classList.add('hidden'); window.VibeMart.switchView('profile', 'orders');">
+        📦 View in My Orders History
+      </button>
+    </div>
+  </div>
+
+  <!-- 9. LIVE CUSTOMER SUPPORT DRAWER -->
+  <div id="modal-support" class="modal-overlay hidden" onclick="document.getElementById('modal-support').classList.add('hidden');">
+    <div class="modal-content" style="max-width: 460px; height: 580px; display: flex; flex-direction: column; padding: 0; overflow: hidden;" onclick="event.stopPropagation();">
+      <div style="background: #1e293b; padding: 1rem; border-bottom: 2px solid rgba(250, 204, 21, 0.4); display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-weight: 800; font-size: 1.1rem; color: #f8fafc;">🎧 Customer Helping Team</div>
+        <button onclick="document.getElementById('modal-support').classList.add('hidden');" style="color: #f8fafc;">✕</button>
+      </div>
+      <div style="background: #0f172a; padding: 0.5rem 1rem; font-size: 0.78rem; border-bottom: 1px solid rgba(250, 204, 21, 0.3); color: #f8fafc;">
+        📞 Hotline: <strong>1800-888-VIBE (8423)</strong> | ✉️ support@vibemart.com
+      </div>
+      <div style="flex: 1; padding: 1rem; overflow-y: auto; background: #0f172a;">
+        <div style="background: #1e293b; border: 1px solid rgba(250, 204, 21, 0.4); color: #f8fafc; padding: 0.7rem 1rem; border-radius: 14px; font-size: 0.88rem; max-width: 85%;">
+          Hello! 👋 Welcome to Vibe Mart Support. How can our team assist you today?
+        </div>
+      </div>
+      <form onsubmit="event.preventDefault(); window.VibeMart.showToast('Agent reviewing your message!', 'info');" style="padding: 0.8rem; background: #1e293b; display: flex; gap: 0.5rem;">
+        <input type="text" class="form-input" placeholder="Type message..." required />
+        <button type="submit" class="btn-primary" style="padding: 0.6rem 1rem;">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Include App Script -->
+  <script src="./script.js"></script>
+</body>
+</html>
